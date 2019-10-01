@@ -1,0 +1,22 @@
+{
+  "name": "fhir-visualizers",
+  "version": "0.0.1",
+  "homepage": "https://github.com/synthetichealth/fhir-visualizers",
+  "description": "Simple React-based FHIR Visualizers",
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "moment": "^2.24.0"
+  },
+  "peerDependencies": {      
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "devDependencies": {      
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0" 
+  }
+}
