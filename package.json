@@ -4,9 +4,14 @@
   "homepage": "https://github.com/synthetichealth/fhir-visualizers",
   "description": "Simple React-based FHIR Visualizers",
   "license": "Apache-2.0",
-  "main": "index.js",
+  "files": [
+    "LICENSE",
+    "build/index.js"
+  ],
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
   },
   "dependencies": {
     "moment": "^2.24.0"
@@ -22,6 +27,7 @@
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0",
     "rollup": "^1.25.2",
-    "rollup-plugin-babel": "^4.3.3"
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-postcss": "^2.0.3"
   }
 }

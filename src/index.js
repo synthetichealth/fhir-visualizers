@@ -1,4 +1,5 @@
 import React from 'react';
+import './Visualizers.css';
 import moment from 'moment';
 
 const DSTU2 = '1.0.2';
