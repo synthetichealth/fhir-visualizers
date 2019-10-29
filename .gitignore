@@ -5,7 +5,7 @@
 /coverage
 
 # production
-/build
+#/build  # Should be ignored, but adding for testing
 
 # misc
 .DS_Store

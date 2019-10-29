@@ -19,17 +19,19 @@
   background: #EAEAEA;
 }
 ​
-​
 dl {
   margin-top:0;
   margin-bottom:20px
 }
+
 dd,dt {
   line-height:1.42857
 }
+
 dt {
   font-weight:700
 }
+
 dd {
   margin-left:0
 }
@@ -37,9 +39,11 @@ dd {
   content:" ";
   display:table
 }
+
 .dl-horizontal dd:after {
   clear:both
 }
+
 @media (min-width:768px) {
   .dl-horizontal dt {
     float:left;
