@@ -4,9 +4,6 @@
 # testing
 /coverage
 
-# production
-#/build  # Should be ignored, but adding for testing
-
 # misc
 .DS_Store
 .env.local
