@@ -1,6 +1,14 @@
 # fhir-visualizers
 Simple React-based FHIR Visualizers
 
+# Building the Project
+
+To transpile the project to plain Javascript run:
+
+```shell script
+yarn build
+```
+
 # License
 Copyright 2019 The MITRE Corporation
 

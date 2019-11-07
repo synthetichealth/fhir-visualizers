@@ -22,7 +22,7 @@ const obsValue = (entry) => {
     return '';
   } else if (entry.valueQuantity) {
     return round(entry.valueQuantity.value, 2) + ' ' + entry.valueQuantity.code;
-  } else if (entry.valueCodeableConcept) { 
+  } else if (entry.valueCodeableConcept) {
     return entry.valueCodeableConcept.coding[0].display;
   } else if (entry.valueString) {
     return entry.valueString;
@@ -33,7 +33,7 @@ const obsValue = (entry) => {
     if (!entry.component[0].valueQuantity) {
       return ''; // WTF!!
     }
-    
+
     const v1 = Number.parseFloat(entry.component[0].valueQuantity.value);
     const v2 = Number.parseFloat(entry.component[1].valueQuantity.value);
 
@@ -185,7 +185,7 @@ class GenericVisualizer extends React.Component {
      for (const nestedRow of this.props.nestedRows) {
        const subRowLines = nestedRow.getter(line);
        if (!subRowLines) continue;
-       const subColumns = 
+       const subColumns =
          nestedRow.columns
          .filter(c => c.versions === '*' || c.versions.includes(this.props.version));
 
