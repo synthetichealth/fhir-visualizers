@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 import './Visualizers.css';
 import moment from 'moment';
 
@@ -183,7 +184,12 @@ class GenericVisualizer extends React.Component {
    const nestedRows = [];
    if (this.props.nestedRows) {
      for (const nestedRow of this.props.nestedRows) {
-       const subRowLines = nestedRow.getter(line);
+       let subRowLines;
+       try {
+         subRowLines = nestedRow.getter(line);
+       } catch (e) {
+         subRowLines = undefined;
+       }
        if (!subRowLines) continue;
        const subColumns =
          nestedRow.columns
@@ -192,9 +198,13 @@ class GenericVisualizer extends React.Component {
        for (const subRowLine of subRowLines) {
           nestedRows.push(<tr key={nestedRow.keyFn(subRowLine)}>
             { subColumns.map((c,i) => {
-              // debugger;
                 const formatter = FORMATTERS[c.format];
-                let result = c.getter(subRowLine);
+                let result;
+                try {
+                  result = c.getter(subRowLine);
+                } catch (e) {
+                  result = undefined;
+                }
                 if (result && formatter){
                   result = formatter(result);
                 }
@@ -213,7 +223,13 @@ class GenericVisualizer extends React.Component {
           <tr className={this.props.rowClass || ''} key={this.props.keyFn(line)}>
             { columns.map((c,i) => {
                 const formatter = FORMATTERS[c.format];
-                let result = c.getter(line);
+                let result;
+                try {
+                  result = c.getter(line);
+                } catch (e) {
+                  result = undefined;
+                }
+
                 if (result && formatter){
                   result = formatter(result);
                 }
