@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 import moment from 'moment';
 
 function _defineProperty(obj, key, value) {
@@ -43,7 +44,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".health-record__header {\n  font-family: 'Open Sans', sans-serif;\n  display: -ms-flexbox;\n  display: flex;\n  color: #6b8eb6;\n  font-size: 1em;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 40px 0;\n}\n​\n.health-record__header .header-divider {\n  width: 100%;\n  border-bottom: 1px solid #7e90a3;\n  margin-bottom: 10px;\n}\n​\n.report-line {\n  background: #EAEAEA;\n}\n​\n​\ndl {\n  margin-top:0;\n  margin-bottom:20px\n}\ndd,dt {\n  line-height:1.42857\n}\ndt {\n  font-weight:700\n}\ndd {\n  margin-left:0\n}\n.dl-horizontal dd:after,.dl-horizontal dd:before {\n  content:\" \";\n  display:table\n}\n.dl-horizontal dd:after {\n  clear:both\n}\n@media (min-width:768px) {\n  .dl-horizontal dt {\n    float:left;\n    clear:left;\n    text-align:right;\n    overflow:hidden;\n    text-overflow:ellipsis;\n    white-space:nowrap\n  }\n  .dl-horizontal dd {\n    margin-left:180px\n  }\n}\n";
+var css = ".health-record__header {\n  font-family: 'Open Sans', sans-serif;\n  display: -ms-flexbox;\n  display: flex;\n  color: #6b8eb6;\n  font-size: 1em;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 40px 0;\n}\n​\n.health-record__header .header-divider {\n  width: 100%;\n  border-bottom: 1px solid #7e90a3;\n  margin-bottom: 10px;\n}\n​\n.report-line {\n  background: #EAEAEA;\n}\n​\ndl {\n  margin-top:0;\n  margin-bottom:20px\n}\n\ndd,dt {\n  line-height:1.42857\n}\n\ndt {\n  font-weight:700\n}\n\ndd {\n  margin-left:0\n}\n.dl-horizontal dd:after,.dl-horizontal dd:before {\n  content:\" \";\n  display:table\n}\n\n.dl-horizontal dd:after {\n  clear:both\n}\n\n@media (min-width:768px) {\n  .dl-horizontal dt {\n    float:left;\n    clear:left;\n    text-align:right;\n    overflow:hidden;\n    text-overflow:ellipsis;\n    white-space:nowrap\n  }\n  .dl-horizontal dd {\n    margin-left:180px\n  }\n}\n";
 styleInject(css);
 
 const DSTU2 = '1.0.2';
@@ -202,7 +203,14 @@ class GenericVisualizer extends React.Component {
 
     if (this.props.nestedRows) {
       for (const nestedRow of this.props.nestedRows) {
-        const subRowLines = nestedRow.getter(line);
+        let subRowLines;
+
+        try {
+          subRowLines = nestedRow.getter(line);
+        } catch (e) {
+          subRowLines = undefined;
+        }
+
         if (!subRowLines) continue;
         const subColumns = nestedRow.columns.filter(c => c.versions === '*' || c.versions.includes(this.props.version));
 
@@ -210,9 +218,14 @@ class GenericVisualizer extends React.Component {
           nestedRows.push(React.createElement("tr", {
             key: nestedRow.keyFn(subRowLine)
           }, subColumns.map((c, i) => {
-            // debugger;
             const formatter = FORMATTERS[c.format];
-            let result = c.getter(subRowLine);
+            let result;
+
+            try {
+              result = c.getter(subRowLine);
+            } catch (e) {
+              result = undefined;
+            }
 
             if (result && formatter) {
               result = formatter(result);
@@ -237,7 +250,13 @@ class GenericVisualizer extends React.Component {
       key: this.props.keyFn(line)
     }, columns.map((c, i) => {
       const formatter = FORMATTERS[c.format];
-      let result = c.getter(line);
+      let result;
+
+      try {
+        result = c.getter(line);
+      } catch (e) {
+        result = undefined;
+      }
 
       if (result && formatter) {
         result = formatter(result);
