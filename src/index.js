@@ -632,5 +632,5 @@ export {
   ProceduresVisualizer,
   EncountersVisualizer,
   ImmunizationsVisualizer,
-  ResourceVisualizer,
+  ResourceVisualizer
 };
