@@ -18,7 +18,11 @@
 .report-line {
   background: #EAEAEA;
 }
-​
+
+.display-linebreak {
+  white-space: pre-line;
+}
+
 dl {
   margin-top:0;
   margin-bottom:20px

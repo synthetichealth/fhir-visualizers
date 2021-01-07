@@ -44,8 +44,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".health-record__header {\n  font-family: 'Open Sans', sans-serif;\n  display: -ms-flexbox;\n  display: flex;\n  color: #6b8eb6;\n  font-size: 1em;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 40px 0;\n}\n​\n.health-record__header .header-divider {\n  width: 100%;\n  border-bottom: 1px solid #7e90a3;\n  margin-bottom: 10px;\n}\n​\n.report-line {\n  background: #EAEAEA;\n}\n​\ndl {\n  margin-top:0;\n  margin-bottom:20px\n}\n\ndd,dt {\n  line-height:1.42857\n}\n\ndt {\n  font-weight:700\n}\n\ndd {\n  margin-left:0\n}\n.dl-horizontal dd:after,.dl-horizontal dd:before {\n  content:\" \";\n  display:table\n}\n\n.dl-horizontal dd:after {\n  clear:both\n}\n\n@media (min-width:768px) {\n  .dl-horizontal dt {\n    float:left;\n    clear:left;\n    text-align:right;\n    overflow:hidden;\n    text-overflow:ellipsis;\n    white-space:nowrap\n  }\n  .dl-horizontal dd {\n    margin-left:180px\n  }\n}\n";
-styleInject(css);
+var css_248z = ".health-record__header {\n  font-family: 'Open Sans', sans-serif;\n  display: -ms-flexbox;\n  display: flex;\n  color: #6b8eb6;\n  font-size: 1em;\n  font-weight: bold;\n  text-transform: uppercase;\n  margin: 40px 0;\n}\n​\n.health-record__header .header-divider {\n  width: 100%;\n  border-bottom: 1px solid #7e90a3;\n  margin-bottom: 10px;\n}\n​\n.report-line {\n  background: #EAEAEA;\n}\n\n.display-linebreak {\n  white-space: pre-line;\n}\n\ndl {\n  margin-top:0;\n  margin-bottom:20px\n}\n\ndd,dt {\n  line-height:1.42857\n}\n\ndt {\n  font-weight:700\n}\n\ndd {\n  margin-left:0\n}\n.dl-horizontal dd:after,.dl-horizontal dd:before {\n  content:\" \";\n  display:table\n}\n\n.dl-horizontal dd:after {\n  clear:both\n}\n\n@media (min-width:768px) {\n  .dl-horizontal dt {\n    float:left;\n    clear:left;\n    text-align:right;\n    overflow:hidden;\n    text-overflow:ellipsis;\n    white-space:nowrap\n  }\n  .dl-horizontal dd {\n    margin-left:180px\n  }\n}\n";
+styleInject(css_248z);
 
 const DSTU2 = '1.0.2';
 const STU3 = '3.0.1';
@@ -60,6 +60,11 @@ const FORMATTERS = {
   time: str => moment(str).format('HH:mm:ss'),
   dateTime: str => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
   numberWithCommas: str => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+};
+const SPACER = {
+  title: '',
+  versions: '*',
+  getter: () => ''
 };
 
 const obsValue = entry => {
@@ -151,32 +156,32 @@ class PatientVisualizer extends React.Component {
       }
     }
 
-    return React.createElement("div", null, React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
       className: "health-record__header"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "header-title"
-    }, "Patient"), React.createElement("div", {
+    }, "Patient"), /*#__PURE__*/React.createElement("div", {
       className: "header-divider"
-    })), React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
       id: "p_brief",
       className: "row"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       id: "p_brief_records",
       className: "col-6"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       id: "p_brief_name_address",
       className: "p_block"
-    }, React.createElement("dl", {
+    }, /*#__PURE__*/React.createElement("dl", {
       className: "dl-horizontal p_brief_family"
-    }, React.createElement("dt", null, "Name"), React.createElement("dd", null, patient.name[0].family, ", ", patient.name[0].given.join(' ')), React.createElement("dt", null, "Gender"), React.createElement("dd", null, patient.gender), React.createElement("dt", null, "Date of Birth"), React.createElement("dd", null, patient.birthDate), React.createElement("dt", null, "Address"), React.createElement("dd", null, patient.address[0].line.join(' ')), React.createElement("dt", null, "City, State"), React.createElement("dd", null, patient.address[0].city, ", ", patient.address[0].state), React.createElement("dt", null, "Postal Code"), React.createElement("dd", null, patient.address[0].postalCode), patient.deceasedDateTime && React.createElement(React.Fragment, null, React.createElement("dt", null, "Date of Death"), React.createElement("dd", null, patient.deceasedDateTime))))), React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("dt", null, "Name"), /*#__PURE__*/React.createElement("dd", null, patient.name[0].family, ", ", patient.name[0].given.join(' ')), /*#__PURE__*/React.createElement("dt", null, "Gender"), /*#__PURE__*/React.createElement("dd", null, patient.gender), /*#__PURE__*/React.createElement("dt", null, "Date of Birth"), /*#__PURE__*/React.createElement("dd", null, patient.birthDate), /*#__PURE__*/React.createElement("dt", null, "Address"), /*#__PURE__*/React.createElement("dd", null, patient.address[0].line.join(' ')), /*#__PURE__*/React.createElement("dt", null, "City, State"), /*#__PURE__*/React.createElement("dd", null, patient.address[0].city, ", ", patient.address[0].state), /*#__PURE__*/React.createElement("dt", null, "Postal Code"), /*#__PURE__*/React.createElement("dd", null, patient.address[0].postalCode), patient.deceasedDateTime && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("dt", null, "Date of Death"), /*#__PURE__*/React.createElement("dd", null, patient.deceasedDateTime))))), /*#__PURE__*/React.createElement("div", {
       id: "p_brief_records",
       className: "col-6"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       id: "p_brief_name_address",
       className: "p_block"
-    }, React.createElement("dl", {
+    }, /*#__PURE__*/React.createElement("dl", {
       className: "dl-horizontal p_brief_family"
-    }, React.createElement("dt", null, "Height"), React.createElement("dd", null, obsValue(height_obs)), React.createElement("dt", null, "Weight"), React.createElement("dd", null, obsValue(weight_obs)), React.createElement("dt", null, "Race"), React.createElement("dd", null, race || 'unk.'), React.createElement("dt", null, "Ethnicity"), React.createElement("dd", null, ethnicity || 'unk.'), React.createElement("dt", null, "Language"), React.createElement("dd", null, language || 'unk.'), React.createElement("dt", null, "Blood Type"), React.createElement("dd", null, "unknown"), patient.deceasedDateTime && React.createElement(React.Fragment, null, React.createElement("dt", null, "Cause of Death"), React.createElement("dd", null, cause_of_death_obs)))))));
+    }, /*#__PURE__*/React.createElement("dt", null, "Height"), /*#__PURE__*/React.createElement("dd", null, obsValue(height_obs)), /*#__PURE__*/React.createElement("dt", null, "Weight"), /*#__PURE__*/React.createElement("dd", null, obsValue(weight_obs)), /*#__PURE__*/React.createElement("dt", null, "Race"), /*#__PURE__*/React.createElement("dd", null, race || 'unk.'), /*#__PURE__*/React.createElement("dt", null, "Ethnicity"), /*#__PURE__*/React.createElement("dd", null, ethnicity || 'unk.'), /*#__PURE__*/React.createElement("dt", null, "Language"), /*#__PURE__*/React.createElement("dd", null, language || 'unk.'), /*#__PURE__*/React.createElement("dt", null, "Blood Type"), /*#__PURE__*/React.createElement("dd", null, "unknown"), patient.deceasedDateTime && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("dt", null, "Cause of Death"), /*#__PURE__*/React.createElement("dd", null, cause_of_death_obs)))))));
   }
 
 }
@@ -191,7 +196,7 @@ class GenericVisualizer extends React.Component {
   */
   renderHeaderLine() {
     const columns = this.props.columns.filter(c => c.versions === '*' || c.versions.includes(this.props.version)).map(c => c.title);
-    return columns.map(c => React.createElement("th", {
+    return columns.map(c => /*#__PURE__*/React.createElement("th", {
       scope: "col",
       key: c
     }, c));
@@ -215,7 +220,7 @@ class GenericVisualizer extends React.Component {
         const subColumns = nestedRow.columns.filter(c => c.versions === '*' || c.versions.includes(this.props.version));
 
         for (const subRowLine of subRowLines) {
-          nestedRows.push(React.createElement("tr", {
+          nestedRows.push( /*#__PURE__*/React.createElement("tr", {
             key: nestedRow.keyFn(subRowLine)
           }, subColumns.map((c, i) => {
             const formatter = FORMATTERS[c.format];
@@ -235,17 +240,19 @@ class GenericVisualizer extends React.Component {
               result = c.defaultValue;
             }
 
-            return React.createElement("td", {
+            return /*#__PURE__*/React.createElement("td", {
               key: i
-            }, result);
+            }, /*#__PURE__*/React.createElement("div", {
+              className: "display-linebreak"
+            }, result));
           })));
         }
       }
     }
 
-    return React.createElement(React.Fragment, {
+    return /*#__PURE__*/React.createElement(React.Fragment, {
       key: this.props.keyFn(line)
-    }, React.createElement("tr", {
+    }, /*#__PURE__*/React.createElement("tr", {
       className: this.props.rowClass || '',
       key: this.props.keyFn(line)
     }, columns.map((c, i) => {
@@ -266,26 +273,28 @@ class GenericVisualizer extends React.Component {
         result = c.defaultValue;
       }
 
-      return React.createElement("td", {
+      return /*#__PURE__*/React.createElement("td", {
         key: i
-      }, result);
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "display-linebreak"
+      }, result));
     })), nestedRows); // TODO: multi-liners
   }
 
   render() {
-    return React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       id: this.props.title
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "health-record__header"
-    }, React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "header-title"
-    }, this.props.title), React.createElement("div", {
+    }, this.props.title), /*#__PURE__*/React.createElement("div", {
       className: "header-divider"
-    })), React.createElement("table", {
+    })), /*#__PURE__*/React.createElement("table", {
       className: "table table-sm table-hover"
-    }, React.createElement("thead", {
+    }, /*#__PURE__*/React.createElement("thead", {
       id: `p_${this.props.title}_head`
-    }, React.createElement("tr", null, this.renderHeaderLine())), React.createElement("tbody", {
+    }, /*#__PURE__*/React.createElement("tr", null, this.renderHeaderLine())), /*#__PURE__*/React.createElement("tbody", {
       id: `p_${this.props.title}_list`
     }, this.props.rows && this.props.rows.slice().reverse().map(c => this.renderBodyLine(c)))));
   }
@@ -383,11 +392,16 @@ _defineProperty(ReportsVisualizer, "defaultProps", {
       title: 'Value',
       versions: '*',
       getter: o => obsValue(o)
-    }, {
-      title: 'Date',
+    }, SPACER]
+  }, {
+    getter: rpt => rpt.presentedForm,
+    keyFn: p => Math.floor(Math.random() * 100),
+    // TODO, pass in index
+    columns: [SPACER, {
+      title: 'Content',
       versions: '*',
-      getter: o => ''
-    }]
+      getter: p => atob(p.data)
+    }, SPACER, SPACER]
   }],
   keyFn: r => r.id
 });
@@ -473,11 +487,7 @@ _defineProperty(CarePlansVisualizer, "defaultProps", {
   nestedRows: [{
     getter: cp => cp.goals,
     keyFn: g => g.id,
-    columns: [{
-      title: '',
-      versions: '*',
-      getter: g => ''
-    }, {
+    columns: [SPACER, {
       title: 'Goal',
       versions: [DSTU2],
       getter: g => `Goal: ${goalDescriptionDSTU2(g)}`
@@ -485,27 +495,15 @@ _defineProperty(CarePlansVisualizer, "defaultProps", {
       title: 'Goal',
       versions: [STU3, R4],
       getter: g => `Goal: ${goalDescriptionSTU3R4(g)}`
-    }, {
-      title: '',
-      versions: '*',
-      getter: g => ''
-    }]
+    }, SPACER]
   }, {
     getter: cp => cp.activity,
     keyFn: a => Math.random(),
-    columns: [{
-      title: '',
-      versions: '*',
-      getter: a => ''
-    }, {
+    columns: [SPACER, {
       title: 'Activity',
       versions: '*',
       getter: a => `Activity: ${a.detail.code.coding[0].display}`
-    }, {
-      title: '',
-      versions: '*',
-      getter: a => ''
-    }]
+    }, SPACER]
   }],
   keyFn: c => c.id
 });
@@ -577,4 +575,21 @@ _defineProperty(ImmunizationsVisualizer, "defaultProps", {
   keyFn: c => c.id
 });
 
-export { AllergiesVisualizer, CarePlansVisualizer, ConditionsVisualizer, EncountersVisualizer, ImmunizationsVisualizer, MedicationsVisualizer, ObservationsVisualizer, PatientVisualizer, ProceduresVisualizer, ReportsVisualizer };
+class DocumentReferencesVisualizer extends GenericVisualizer {}
+
+_defineProperty(DocumentReferencesVisualizer, "defaultProps", {
+  title: 'Documents',
+  columns: [{
+    title: 'Date',
+    versions: '*',
+    format: 'date',
+    getter: d => d.date
+  }, {
+    title: 'Content',
+    versions: '*',
+    getter: d => atob(d.content[0].attachment.data)
+  }],
+  keyFn: dr => dr.id
+});
+
+export { AllergiesVisualizer, CarePlansVisualizer, ConditionsVisualizer, DocumentReferencesVisualizer, EncountersVisualizer, ImmunizationsVisualizer, MedicationsVisualizer, ObservationsVisualizer, PatientVisualizer, ProceduresVisualizer, ReportsVisualizer };

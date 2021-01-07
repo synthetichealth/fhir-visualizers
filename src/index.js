@@ -18,6 +18,8 @@ const FORMATTERS = {
   numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 };
 
+const SPACER = { title: '', versions: '*', getter: () => '' };
+
 const obsValue = (entry) => {
   if (entry == null) {
     return '';
@@ -211,7 +213,7 @@ class GenericVisualizer extends React.Component {
                 if (!result && c.defaultValue) {
                   result = c.defaultValue;
                 }
-                return (<td key={i}>{ result }</td>);
+                return (<td key={i}><div className="display-linebreak">{ result }</div></td>);
               }) }
           </tr>);
        }
@@ -236,7 +238,7 @@ class GenericVisualizer extends React.Component {
                 if (!result && c.defaultValue) {
                   result = c.defaultValue;
                 }
-                return (<td key={i}>{ result }</td>);
+                return (<td key={i}><div className="display-linebreak">{ result }</div></td>);
               }) }
           </tr>
           { nestedRows }
@@ -310,7 +312,17 @@ class ReportsVisualizer extends GenericVisualizer {
           { title: 'LOINC', versions: '*', getter: o => o.code.coding[0].code },
           { title: 'Report/Observation', versions: '*', getter: o => o.code.coding[0].display },
           { title: 'Value', versions: '*', getter: o => obsValue(o) },
-          { title: 'Date', versions: '*', getter: o => '' }
+          SPACER
+        ]
+      },
+      {
+        getter: rpt => rpt.presentedForm,
+        keyFn: p => Math.floor(Math.random() * 100), // TODO, pass in index
+        columns: [
+          SPACER,
+          { title: 'Content', versions: '*', getter: p => atob(p.data) },
+          SPACER,
+          SPACER
         ]
       }
     ],
@@ -368,19 +380,19 @@ class CarePlansVisualizer extends GenericVisualizer {
         getter: cp => cp.goals,
         keyFn: g => g.id,
         columns: [
-          { title: '', versions: '*', getter: g => '' },
+          SPACER,
           { title: 'Goal', versions: [DSTU2], getter: g => `Goal: ${goalDescriptionDSTU2(g)}` },
           { title: 'Goal', versions: [STU3, R4], getter: g => `Goal: ${goalDescriptionSTU3R4(g)}` },
-          { title: '', versions: '*', getter: g => '' }
+          SPACER
         ]
       },
       {
         getter: cp => cp.activity,
         keyFn: a => Math.random(),
         columns: [
-          { title: '', versions: '*', getter: a => '' },
+          SPACER,
           { title: 'Activity', versions: '*', getter: a => `Activity: ${a.detail.code.coding[0].display}` },
-          { title: '', versions: '*', getter: a => '' }
+          SPACER
         ]
       }
     ],
@@ -425,6 +437,17 @@ class ImmunizationsVisualizer extends GenericVisualizer {
   };
 }
 
+class DocumentReferencesVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Documents',
+    columns: [
+        { title: 'Date', versions: '*', format: 'date', getter: d => d.date },
+        { title: 'Content', versions: '*', getter: d => atob(d.content[0].attachment.data) }
+      ],
+      keyFn: dr => dr.id
+  };
+}
+
 export {
   PatientVisualizer,
   ConditionsVisualizer,
@@ -435,6 +458,6 @@ export {
   CarePlansVisualizer,
   ProceduresVisualizer,
   EncountersVisualizer,
-  ImmunizationsVisualizer
-
+  ImmunizationsVisualizer,
+  DocumentReferencesVisualizer
 };

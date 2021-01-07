@@ -1,6 +1,6 @@
 {
   "name": "fhir-visualizers",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/synthetichealth/fhir-visualizers",
   "description": "Simple React-based FHIR Visualizers",
   "license": "Apache-2.0",
