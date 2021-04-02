@@ -326,7 +326,7 @@ class ConditionsVisualizer extends GenericVisualizer {
         { title: 'Date Resolved', 'versions': '*', format: 'date', getter: c => c.abatementDateTime, defaultValue: 'N/A' },
         { title: 'Recorded Date', versions: '*', format: 'date', getter: c => c.recordedDate },
         { title: 'Severity', versions: '*', getter: c => c.severity.coding[0].code },
-        { title: 'Body Site', versions: '*', getter: c => c.bodySite.coding[0].code }
+        { title: 'Body Site', versions: '*', getter: c => c.bodySite[0].coding[0].code }
       ],
       keyFn: c => c.id
   };
@@ -341,6 +341,8 @@ class ObservationsVisualizer extends GenericVisualizer {
         { title: 'Observation', versions: '*', getter: o => o.code.coding[0].display },
         { title: 'Value', versions: '*', getter: o => obsValue(o) },
         { title: 'Effective Date', 'versions': '*', format: 'date', getter: o => o.effectiveDateTime },
+        { title: 'Effective Period Start', 'versions': '*', format: 'date', getter: o => o.effectivePeriod.start },
+        { title: 'Effective Period End', 'versions': '*', format: 'date', getter: o => o.effectivePeriod.end },
         { title: 'Issued Date', 'versions': '*', format: 'date', getter: o => o.issued },
         { title: 'ID', versions: '*', getter: o => o.id }
       ],
@@ -485,7 +487,7 @@ class EncountersVisualizer extends GenericVisualizer {
         { title: 'Start Time', versions: '*', format: 'dateTime', getter: e => e.period.start },
         { title: 'End Time', versions: '*', format: 'dateTime', getter: e => e.period.end },
         { title: 'Diagnosis', versions: '*', getter: e => e.diagnosis.map(d => d.condition.reference).join()},
-        { title: 'Discharge Disposition', versions: '*', getter: e => e.hospitalization.dischargeDisposition.coding[0].display}
+        { title: 'Discharge Disposition', versions: '*', getter: e => `${e.hospitalization.dischargeDisposition.coding[0].code}, ${e.hospitalization.dischargeDisposition.coding[0].display}` }
       ],
       keyFn: c => c.id
   };
@@ -608,6 +610,7 @@ class MedicationRequestVisualizer extends GenericVisualizer {
         { title: 'Medication', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].display },
         { title: 'Dosage Timing Start', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.start},
         { title: 'Dosage Timing End', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.end},
+        { title: 'Dosage Date', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.event},
         { title: 'Author Date', versions: '*', format: 'date', getter: m => m.authoredOn },
         { title: 'Do Not Perform', versions: '*', getter: m => m.doNotPerform},
         { title: 'Reason Code', versions: '*', getter: m => `${m.reasonCode[0].coding[0].code}, ${m.reasonCode[0].coding[0].display}` },
@@ -626,6 +629,7 @@ class MedicationAdministrationVisualizer extends GenericVisualizer {
         { title: 'Route', versions: '*', getter: m => `${m.dosage.route.coding[0].code}, ${m.dosage.route.coding[0].display}` },
         { title: 'Effective Start', versions: '*', format: 'date', getter: m => m.effectivePeriod.start},
         { title: 'Effective End', versions: '*', format: 'date', getter: m => m.effectivePeriod.end},
+        { title: 'Effective Date', versions: '*', format: 'date', getter: m => m.effectiveDateTime},
         { title: 'Status', versions: '*', getter: m => m.status},
         { title: 'Status Reason', versions: '*', getter: m => `${m.statusReason[0].coding[0].code}, ${m.statusReason[0].coding[0].display}` },
         { title: 'Recorded', versions: '*', format: 'date', getter: m => m.extension.recorded }
