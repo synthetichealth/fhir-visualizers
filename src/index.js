@@ -100,7 +100,7 @@ class PatientVisualizer extends React.Component {
     const cause_of_death_obs = null;
 
     let lat, lng;
-    if (patient.address[0].extension) {
+    if (patient.address && patient.address[0].extension) {
       const geolocation = patient.address[0].extension.find(e => e.url === 'http://hl7.org/fhir/StructureDefinition/geolocation');
 
       if (geolocation && geolocation.extension.length > 1) {
