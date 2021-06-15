@@ -14,5 +14,5 @@ export default {
       extensions: [ '.css' ]
     })
   ],
-  external: ['react']
+  external: ['react','moment','bootstrap/dist/css/bootstrap.css']
 }

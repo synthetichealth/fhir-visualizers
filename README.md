@@ -6,11 +6,11 @@ Simple React-based FHIR Visualizers
 To transpile the project to plain Javascript run:
 
 ```shell script
-yarn build
+npm run build
 ```
 
 # License
-Copyright 2019 The MITRE Corporation
+Copyright 2019-2021 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
