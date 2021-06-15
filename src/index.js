@@ -273,6 +273,34 @@ class GenericVisualizer extends React.Component {
   }
 }
 
+
+class ResourceVisualizer extends React.Component {
+  render() {
+    const resourceType = this.props.resourceType;
+    if (resourceType === "Patient")
+      return <PatientVisualizer patient={this.props.patient} />;
+    else if (resourceType === "Condition")
+      return <ConditionsVisualizer rows={this.props.rows} />;
+    else if (resourceType === "Observation")
+      return <ObservationsVisualizer rows={this.props.rows} />;
+    else if (resourceType === "DiagnosticReport")
+      return <ReportsVisualizer rows={this.props.rows} />;
+    else if (resourceType === "MedicationRequest")
+      return <MedicationsVisualizer rows={this.props.rows} />;
+    else if (resourceType === "AllergyIntolerance")
+      return <AllergiesVisualizer rows={this.props.rows} />;
+    else if (resourceType === "CarePlan")
+      return <CarePlansVisualizer rows={this.props.rows} />;
+    else if (resourceType === "Procedure")
+      return <ProceduresVisualizer rows={this.props.rows} />;
+    else if (resourceType === "Encounter")
+      return <EncountersVisualizer rows={this.props.rows} />;
+    else if (resourceType === "Immunization")
+      return <ImmunizationsVisualizer rows={this.props.rows} />;
+  }
+}
+
+
 class ConditionsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Conditions',
@@ -466,5 +494,6 @@ export {
   ProceduresVisualizer,
   EncountersVisualizer,
   ImmunizationsVisualizer,
-  DocumentReferencesVisualizer
+  DocumentReferencesVisualizer,
+  ResourceVisualizer
 };
