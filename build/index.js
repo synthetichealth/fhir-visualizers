@@ -147,7 +147,7 @@ class PatientVisualizer extends React.Component {
     const cause_of_death_obs = null;
     let lat, lng;
 
-    if (patient.address[0].extension) {
+    if (patient.address && patient.address[0].extension) {
       const geolocation = patient.address[0].extension.find(e => e.url === 'http://hl7.org/fhir/StructureDefinition/geolocation');
 
       if (geolocation && geolocation.extension.length > 1) {
@@ -288,7 +288,9 @@ class GenericVisualizer extends React.Component {
       className: "health-record__header"
     }, /*#__PURE__*/React.createElement("div", {
       className: "header-title"
-    }, this.props.title), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("a", {
+      id: this.props.title
+    }, this.props.title)), /*#__PURE__*/React.createElement("div", {
       className: "header-divider"
     })), /*#__PURE__*/React.createElement("table", {
       className: "table table-sm table-hover"

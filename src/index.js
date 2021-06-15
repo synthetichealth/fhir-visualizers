@@ -250,7 +250,12 @@ class GenericVisualizer extends React.Component {
   render() {
     return (
       <div id={this.props.title}>
-        <div className="health-record__header"><div className="header-title">{ this.props.title }</div><div className="header-divider"></div></div>
+        <div className="health-record__header">
+          <div className="header-title">
+            <a id={this.props.title}>{ this.props.title }</a>
+          </div>
+          <div className="header-divider"></div>
+        </div>
         <table className="table table-sm table-hover">
         <thead id={ `p_${this.props.title}_head` }>
           <tr>
