@@ -99,15 +99,17 @@ class PatientVisualizer extends React.Component {
 
     const cause_of_death_obs = null;
 
-    let lat, lng;
-    if (patient.address && patient.address[0].extension) {
-      const geolocation = patient.address[0].extension.find(e => e.url === 'http://hl7.org/fhir/StructureDefinition/geolocation');
+    const hasAddress = patient.address && patient.address[0];
 
-      if (geolocation && geolocation.extension.length > 1) {
-        lat = geolocation.extension.find(e => e.url === 'latitude').valueDecimal;
-        lng = geolocation.extension.find(e => e.url === 'longitude').valueDecimal;
-      }
-    }
+    // let lat, lng;
+    // if (hasAddress && patient.address[0].extension) {
+    //   const geolocation = patient.address[0].extension.find(e => e.url === 'http://hl7.org/fhir/StructureDefinition/geolocation');
+
+    //   if (geolocation && geolocation.extension.length > 1) {
+    //     lat = geolocation.extension.find(e => e.url === 'latitude').valueDecimal;
+    //     lng = geolocation.extension.find(e => e.url === 'longitude').valueDecimal;
+    //   }
+    // }
 
     return (
       <div>
@@ -123,11 +125,11 @@ class PatientVisualizer extends React.Component {
               <dt>Date of Birth</dt>
                 <dd>{ patient.birthDate }</dd>
               <dt>Address</dt>
-                <dd>{ patient.address[0].line.join(' ') }</dd>
+                <dd>{ hasAddress && patient.address[0].line.join(' ') }</dd>
               <dt>City, State</dt>
-                <dd>{ patient.address[0].city }, { patient.address[0].state }</dd>
+                <dd>{ hasAddress && patient.address[0].city }, { hasAddress && patient.address[0].state }</dd>
               <dt>Postal Code</dt>
-                <dd>{ patient.address[0].postalCode }</dd>
+                <dd>{ hasAddress && patient.address[0].postalCode }</dd>
               {patient.deceasedDateTime && <React.Fragment><dt>Date of Death</dt>
                 <dd>{ patient.deceasedDateTime }</dd></React.Fragment> }
             </dl>
