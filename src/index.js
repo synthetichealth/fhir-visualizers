@@ -15,7 +15,8 @@ const FORMATTERS = {
   date: (str) => moment(str).format('YYYY-MM-DD'),
   time: (str) => moment(str).format('HH:mm:ss'),
   dateTime: (str) => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
-  numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+  code: (code) => `${code.code} ${code.display}`
 };
 
 const SPACER = { title: '', versions: '*', getter: () => '' };
@@ -320,13 +321,12 @@ class ConditionsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Conditions',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Condition', versions: '*', getter: c => c.code.coding[0].display },
+        { title: 'Condition', versions: '*', format: 'code', getter: c => c.code.coding[0] },
         { title: 'Date of Onset', versions: '*', format: 'date', getter: c => c.onsetDateTime },
         { title: 'Date Resolved', 'versions': '*', format: 'date', getter: c => c.abatementDateTime, defaultValue: 'N/A' },
         { title: 'Recorded Date', versions: '*', format: 'date', getter: c => c.recordedDate },
-        { title: 'Severity', versions: '*', getter: c => c.severity.coding[0].code },
-        { title: 'Body Site', versions: '*', getter: c => c.bodySite[0].coding[0].code }
+        { title: 'Severity', versions: '*', format: 'code', getter: c => c.severity.coding[0] },
+        { title: 'Body Site', versions: '*', format: 'code', getter: c => c.bodySite[0].coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -337,8 +337,7 @@ class ObservationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Observations',
     columns: [
-        { title: 'LOINC', versions: '*', getter: o => o.code.coding[0].code },
-        { title: 'Observation', versions: '*', getter: o => o.code.coding[0].display },
+        { title: 'Observation', versions: '*', format: 'code', getter: o => o.code.coding[0] },
         { title: 'Value', versions: '*', getter: o => obsValue(o) },
         { title: 'Effective Date', 'versions': '*', format: 'date', getter: o => o.effectiveDateTime },
         { title: 'Effective Period Start', 'versions': '*', format: 'date', getter: o => o.effectivePeriod.start },
@@ -355,8 +354,7 @@ class ReportsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Reports',
     columns: [
-        { title: 'LOINC', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Report/Observation', versions: '*', getter: c => c.code.coding[0].display },
+        { title: 'Report/Observation', versions: '*', format: 'code', getter: c.code.coding[0] },
         { title: 'Value', versions: '*', getter: () => '' },
         { title: 'Date', 'versions': '*', format: 'date', getter: c => c.effectiveDateTime, defaultValue: 'N/A' }
       ],
@@ -366,8 +364,7 @@ class ReportsVisualizer extends GenericVisualizer {
         getter: rpt => rpt.observations,
         keyFn: o => o.id,
         columns: [
-          { title: 'LOINC', versions: '*', getter: o => o.code.coding[0].code },
-          { title: 'Report/Observation', versions: '*', getter: o => o.code.coding[0].display },
+          { title: 'Report/Observation', versions: '*', format: 'code', getter: o => o.code.coding[0] },
           { title: 'Value', versions: '*', getter: o => obsValue(o) },
           SPACER
         ]
@@ -391,8 +388,7 @@ class MedicationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Medications',
     columns: [
-        { title: 'RxNorm', versions: '*', getter: c => c.medicationCodeableConcept.coding[0].code },
-        { title: 'Medication', versions: '*', getter: c => c.medicationCodeableConcept.coding[0].display },
+        { title: 'Medication', versions: '*', format: 'code', getter: c => c.medicationCodeableConcept.coding[0] },
         { title: 'Date Prescribed', versions: '*', format: 'date', getter: c => c.authoredOn },
         { title: 'Status', 'versions': '*', getter: c => c.status }
       ],
@@ -404,8 +400,7 @@ class AllergiesVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Allergies',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: a => a.code.coding[0].code },
-        { title: 'Allergy', versions: '*', getter: a => a.code.coding[0].display },
+        { title: 'Allergy', versions: '*', format: 'code', getter: a => a.code.coding[0] },
         { title: 'Date Recorded', versions: [R4], getter: a => a.recordedDate },
         { title: 'Date Recorded', versions: [DSTU2, STU3], format: 'date', getter: a => a.assertedDate },
         { title: 'Onset', versions: '*', format: 'date', getter: a => a.onsetDateTime },
@@ -430,8 +425,7 @@ class CarePlansVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'CarePlans',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.category[0].coding[0].code },
-        { title: 'Care Plan', versions: '*', getter: c => c.category[0].coding[0].display },
+        { title: 'Care Plan', versions: '*', format: 'code', getter: c => c.category[0].coding[0] },
         { title: 'Date', versions: '*', format: 'date', getter: c => c.period.start }
     ],
     nestedRows: [
@@ -450,7 +444,7 @@ class CarePlansVisualizer extends GenericVisualizer {
         keyFn: a => Math.random(),
         columns: [
           SPACER,
-          { title: 'Activity', versions: '*', getter: a => `Activity: ${a.detail.code.coding[0].display}` },
+          { title: 'Activity', versions: '*', format: 'code', getter: a => a.detail.code.coding[0] },
           SPACER
         ]
       }
@@ -463,16 +457,15 @@ class ProceduresVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Procedures',
     columns: [
-      { title: 'SNOMED', versions: '*', getter: p => p.code.coding[0].code },
-      { title: 'Procedure', versions: '*', getter: p => p.code.coding[0].display },
+      { title: 'Procedure', versions: '*', format: 'code', getter: p => p.code.coding[0] },
       { title: 'Date Started', versions: '*', format: 'dateTime', getter: p => p.performedPeriod.start },
       { title: 'Date Completed', versions: '*', format: 'dateTime', getter: p => p.performedPeriod.end },
       { title: 'Date Performed', versions: '*', format: 'dateTime', getter: p => p.performedDateTime },
       { title: 'ID', versions: '*', getter: p => p.id },
       { title: 'Recorded', versions: '*', format: 'dateTime', getter: p => p.extension.recorded },
-      { title: 'Reason', versions: '*', getter: p => `${p.reasonCode.coding[0].code}, ${p.reasonCode.coding[0].display}` },
+      { title: 'Reason', versions: '*', format: 'code', getter: p => p.reasonCode.coding[0] },
       { title: 'Status', versions: '*', getter: p => p.status },
-      { title: 'Status Reason', versions: '*', getter: p => `${p.statusReason.coding[0].code}, ${p.statusReason.coding[0].display}` }
+      { title: 'Status Reason', versions: '*', format: 'code', getter: p => p.statusReason.coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -482,12 +475,11 @@ class EncountersVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Encounters',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: e => e.type[0].coding[0].code },
-        { title: 'Encounter', versions: '*', getter: e => e.type[0].coding[0].display },
+        { title: 'Encounter', versions: '*', format: 'code', getter: e => e.type[0].coding[0] },
         { title: 'Start Time', versions: '*', format: 'dateTime', getter: e => e.period.start },
         { title: 'End Time', versions: '*', format: 'dateTime', getter: e => e.period.end },
         { title: 'Diagnosis', versions: '*', getter: e => e.diagnosis.map(d => d.condition.reference).join()},
-        { title: 'Discharge Disposition', versions: '*', getter: e => `${e.hospitalization.dischargeDisposition.coding[0].code}, ${e.hospitalization.dischargeDisposition.coding[0].display}` }
+        { title: 'Discharge Disposition', versions: '*', format: 'code', getter: e => e.hospitalization.dischargeDisposition.coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -497,8 +489,7 @@ class ImmunizationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Vaccinations',
     columns: [
-        { title: 'CVX', versions: '*', getter: i => i.vaccineCode.coding[0].code },
-        { title: 'Vaccine', versions: '*', getter: i => i.vaccineCode.coding[0].display },
+        { title: 'Vaccine', versions: '*', format: 'code', getter: i => i.vaccineCode.coding[0] },
         { title: 'Date Given', versions: '*', format: 'date', getter: i => i.occurrenceDateTime },
         { title: 'Date Recorded', versions: '*', format: 'date', getter: i => i.recorded }
       ],
@@ -521,14 +512,13 @@ class ServiceRequestVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Service Requests',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: s => s.code.coding[0].code },
-        { title: 'Service', versions: '*', getter: s => s.code.coding[0].display },
+        { title: 'Service', versions: '*', format: 'code', getter: s => s.code.coding[0] },
         { title: 'Author Date', versions: '*', format: 'date', getter: s => s.authoredOn },
         { title: 'Status', versions: '*', getter: s => s.status },
-        { title: 'Reason', versions: '*', getter: s => s.reasonCode[0].coding[0].code },
+        { title: 'Reason', versions: '*', format: 'code', getter: s => s.reasonCode[0].coding[0] },
         { title: 'ID', versions: '*', getter: s => s.id },
         { title: 'Do Not Perform', versions: '*', getter: s => s.doNotPerform },
-        { title: 'Reason Refused', versions: '*', getter: s => `${s.extension.reasonRefused.coding[0].code}, ${s.extension.reasonRefused.coding[0].display}` }
+        { title: 'Reason Refused', versions: '*', format: 'code', getter: s => s.extension.reasonRefused.coding[0] }
       ],
       keyFn: s => s.id
   };
@@ -538,11 +528,10 @@ class DeviceRequestVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Device Requests',
     columns: [
-        { title: 'Code', versions: '*', getter: d => d.codeCodeableConcept.coding[0].code },
-        { title: 'Device', versions: '*', getter: d => d.codeCodeableConcept.coding[0].display },
+        { title: 'Device', versions: '*', format: 'code', getter: d => d.codeCodeableConcept.coding[0] },
         { title: 'Author Date', versions: '*', format: 'date', getter: d => d.authoredOn },
         { title: 'Do Not Perform', versions: '*', getter: d => d.modifierExtension.doNotPerform },
-        { title: 'Do Not Perform Reason', versions: '*', getter: s => `${s.extension.doNotPerformReason.coding[0].code}, ${s.extension.doNotPerformReason.coding[0].display}` }
+        { title: 'Do Not Perform Reason', versions: '*', format: 'code', getter: s => s.extension.doNotPerformReason.coding[0] }
       ],
       keyFn: d => d.id
   };
@@ -552,8 +541,7 @@ class CommunicationVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Communications',
     columns: [
-        { title: 'Reason Code', versions: '*', getter: c => c.reasonCode[0].coding[0].code },
-        { title: 'Reason', versions: '*', getter: c => c.reasonCode[0].coding[0].display },
+        { title: 'Reason', versions: '*', format: 'code', getter: c => c.reasonCode[0].coding[0] },
         { title: 'Sent', versions: '*', format: 'date', getter: c => c.sent },
         { title: 'Received', versions: '*', format: 'date', getter: c => c.received },
         { title: 'Status', versions: '*', getter: c => c.status }
@@ -566,8 +554,7 @@ class CoverageVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Coverage',
     columns: [
-        { title: 'Type Code', versions: '*', getter: c => c.type.coding[0].code },
-        { title: 'Type', versions: '*', getter: c => c.type.coding[0].display },
+        { title: 'Type', versions: '*', format: 'code', getter: c => c.type.coding[0] },
         { title: 'Start Date', versions: '*', format: 'date', getter: c => c.period.start },
         { title: 'End Date', versions: '*', format: 'date', getter: c => c.period.end }
       ],
@@ -579,8 +566,7 @@ class AdverseEventVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Adverse Events',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: a => a.event.coding[0].code },
-        { title: 'Event', versions: '*', getter: a => a.event.coding[0].display },
+        { title: 'Event', versions: '*', format: 'code', getter: a => a.event.coding[0] },
         { title: 'Date', versions: '*', format: 'date', getter: a => a.date }
       ],
       keyFn: a => a.id
@@ -591,10 +577,8 @@ class NutritionOrderVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Nutrition Orders',
     columns: [
-        { title: 'Preference Code', versions: '*', getter: n => n.foodPreferenceModifier[0].coding[0].code },
-        { title: 'Preference', versions: '*', getter: n => n.foodPreferenceModifier[0].coding[0].display },
-        { title: 'Exclusion Code', versions: '*', getter: n => n.excludeFoodModifier[0].coding[0].code },
-        { title: 'Exclusion', versions: '*', getter: n => n.excludeFoodModifier[0].coding[0].display },
+        { title: 'Preference', versions: '*', format: 'code', getter: n => n.foodPreferenceModifier[0].coding[0] },
+        { title: 'Exclusion', versions: '*', format: 'code', getter: n => n.excludeFoodModifier[0].coding[0] },
         { title: 'Date', versions: '*', format: 'date', getter: n => n.dateTime },
         { title: 'Status', versions: '*', getter: n => n.status }
       ],
@@ -606,15 +590,14 @@ class MedicationRequestVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Medication Requests',
     columns: [
-        { title: 'Medication Code', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].code },
-        { title: 'Medication', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].display },
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
         { title: 'Dosage Timing Start', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.start},
         { title: 'Dosage Timing End', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.end},
         { title: 'Dosage Date', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.event},
         { title: 'Author Date', versions: '*', format: 'date', getter: m => m.authoredOn },
         { title: 'Do Not Perform', versions: '*', getter: m => m.doNotPerform},
-        { title: 'Reason Code', versions: '*', getter: m => `${m.reasonCode[0].coding[0].code}, ${m.reasonCode[0].coding[0].display}` },
-        { title: 'Route', versions: '*', getter: m => `${m.dosageInstruction[0].route.coding[0].code}, ${m.dosageInstruction[0].route.coding[0].display}` }
+        { title: 'Reason', versions: '*', format: 'code', getter: m => m.reasonCode[0].coding[0] },
+        { title: 'Route', versions: '*', format: 'code', getter: m => m.dosageInstruction[0].route.coding[0] }
       ],
       keyFn: m => m.id
   };
@@ -624,14 +607,13 @@ class MedicationAdministrationVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Medication Administration',
     columns: [
-        { title: 'Medication Code', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].code },
-        { title: 'Medication', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].display },
-        { title: 'Route', versions: '*', getter: m => `${m.dosage.route.coding[0].code}, ${m.dosage.route.coding[0].display}` },
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
+        { title: 'Route', versions: '*', format: 'code', getter: m => m.dosage.route.coding[0] },
         { title: 'Effective Start', versions: '*', format: 'date', getter: m => m.effectivePeriod.start},
         { title: 'Effective End', versions: '*', format: 'date', getter: m => m.effectivePeriod.end},
         { title: 'Effective Date', versions: '*', format: 'date', getter: m => m.effectiveDateTime},
         { title: 'Status', versions: '*', getter: m => m.status},
-        { title: 'Status Reason', versions: '*', getter: m => `${m.statusReason[0].coding[0].code}, ${m.statusReason[0].coding[0].display}` },
+        { title: 'Status Reason', versions: '*', format: 'code', getter: m => m.statusReason[0].coding[0] },
         { title: 'Recorded', versions: '*', format: 'date', getter: m => m.extension.recorded }
       ],
       keyFn: m => m.id
@@ -642,8 +624,7 @@ class MedicationDispenseVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Medication Dispenses',
     columns: [
-        { title: 'Medication Code', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].code },
-        { title: 'Medication', versions: '*', getter: m => m.medicationCodeableConcept.coding[0].display },
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
         { title: 'Handed Over Date', versions: '*', format: 'date', getter: m => m.whenHandedOver}
       ],
       keyFn: m => m.id
