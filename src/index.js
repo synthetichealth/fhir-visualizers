@@ -16,7 +16,8 @@ const FORMATTERS = {
   time: (str) => moment(str).format('HH:mm:ss'),
   dateTime: (str) => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
   numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-  code: (code) => `${code.code} ${code.display}`
+  code: (code) => `${code.code} ${code.display ? code.display : ''}`,
+  period: (period) => `${moment(period.start).format('YYYY-MM-DD - h:mm:ss a')} -> ${moment(period.end).format('YYYY-MM-DD - h:mm:ss a')}`
 };
 
 const SPACER = { title: '', versions: '*', getter: () => '' };
@@ -51,6 +52,17 @@ const obsValue = (entry) => {
     }
   }
 
+  return '';
+}
+
+const attributeXTime = (entry, type) => {
+  if (entry == null) {
+    return '';
+  } else if (entry[`${type}DateTime`]) {
+    return FORMATTERS['dateTime'](entry[`${type}DateTime`])
+  } else if (entry[`${type}Period`]) {
+    return FORMATTERS['period'](entry[`${type}Period`])
+  }
   return '';
 }
 
@@ -339,9 +351,7 @@ class ObservationsVisualizer extends GenericVisualizer {
     columns: [
         { title: 'Observation', versions: '*', format: 'code', getter: o => o.code.coding[0] },
         { title: 'Value', versions: '*', getter: o => obsValue(o) },
-        { title: 'Effective Date', 'versions': '*', format: 'date', getter: o => o.effectiveDateTime },
-        { title: 'Effective Period Start', 'versions': '*', format: 'date', getter: o => o.effectivePeriod.start },
-        { title: 'Effective Period End', 'versions': '*', format: 'date', getter: o => o.effectivePeriod.end },
+        { title: 'Effective', 'versions': '*', getter: o => attributeXTime(o,'effective') },
         { title: 'Issued Date', 'versions': '*', format: 'date', getter: o => o.issued },
         { title: 'ID', versions: '*', getter: o => o.id }
       ],
@@ -354,9 +364,9 @@ class ReportsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Reports',
     columns: [
-        { title: 'Report/Observation', versions: '*', format: 'code', getter: c.code.coding[0] },
+        { title: 'Report/Observation', versions: '*', format: 'code', getter: r => r.code.coding[0] },
         { title: 'Value', versions: '*', getter: () => '' },
-        { title: 'Date', 'versions': '*', format: 'date', getter: c => c.effectiveDateTime, defaultValue: 'N/A' }
+        { title: 'Effective', 'versions': '*', getter: r => attributeXTime(r,'effective'), defaultValue: 'N/A' }
       ],
     rowClass: 'report-line',
     nestedRows: [
@@ -426,7 +436,7 @@ class CarePlansVisualizer extends GenericVisualizer {
     title: 'CarePlans',
     columns: [
         { title: 'Care Plan', versions: '*', format: 'code', getter: c => c.category[0].coding[0] },
-        { title: 'Date', versions: '*', format: 'date', getter: c => c.period.start }
+        { title: 'Date', versions: '*', format: 'period', getter: c => c.period }
     ],
     nestedRows: [
       {
@@ -458,9 +468,7 @@ class ProceduresVisualizer extends GenericVisualizer {
     title: 'Procedures',
     columns: [
       { title: 'Procedure', versions: '*', format: 'code', getter: p => p.code.coding[0] },
-      { title: 'Date Started', versions: '*', format: 'dateTime', getter: p => p.performedPeriod.start },
-      { title: 'Date Completed', versions: '*', format: 'dateTime', getter: p => p.performedPeriod.end },
-      { title: 'Date Performed', versions: '*', format: 'dateTime', getter: p => p.performedDateTime },
+      { title: 'Performed', versions: '*', getter: p => attributeXTime(p,'performed') },
       { title: 'ID', versions: '*', getter: p => p.id },
       { title: 'Recorded', versions: '*', format: 'dateTime', getter: p => p.extension.recorded },
       { title: 'Reason', versions: '*', format: 'code', getter: p => p.reasonCode.coding[0] },
@@ -476,8 +484,7 @@ class EncountersVisualizer extends GenericVisualizer {
     title: 'Encounters',
     columns: [
         { title: 'Encounter', versions: '*', format: 'code', getter: e => e.type[0].coding[0] },
-        { title: 'Start Time', versions: '*', format: 'dateTime', getter: e => e.period.start },
-        { title: 'End Time', versions: '*', format: 'dateTime', getter: e => e.period.end },
+        { title: 'Period', versions: '*', format: 'period', getter: e => e.period },
         { title: 'Diagnosis', versions: '*', getter: e => e.diagnosis.map(d => d.condition.reference).join()},
         { title: 'Discharge Disposition', versions: '*', format: 'code', getter: e => e.hospitalization.dischargeDisposition.coding[0] }
       ],
@@ -555,8 +562,7 @@ class CoverageVisualizer extends GenericVisualizer {
     title: 'Coverage',
     columns: [
         { title: 'Type', versions: '*', format: 'code', getter: c => c.type.coding[0] },
-        { title: 'Start Date', versions: '*', format: 'date', getter: c => c.period.start },
-        { title: 'End Date', versions: '*', format: 'date', getter: c => c.period.end }
+        { title: 'Period', versions: '*', format: 'period', getter: c => c.period }
       ],
       keyFn: c => c.id
   };
@@ -591,8 +597,7 @@ class MedicationRequestVisualizer extends GenericVisualizer {
     title: 'Medication Requests',
     columns: [
         { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
-        { title: 'Dosage Timing Start', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.start},
-        { title: 'Dosage Timing End', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod.end},
+        { title: 'Dosage Timing', versions: '*', format: 'period', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod},
         { title: 'Dosage Date', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.event},
         { title: 'Author Date', versions: '*', format: 'date', getter: m => m.authoredOn },
         { title: 'Do Not Perform', versions: '*', getter: m => m.doNotPerform},
@@ -609,9 +614,7 @@ class MedicationAdministrationVisualizer extends GenericVisualizer {
     columns: [
         { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
         { title: 'Route', versions: '*', format: 'code', getter: m => m.dosage.route.coding[0] },
-        { title: 'Effective Start', versions: '*', format: 'date', getter: m => m.effectivePeriod.start},
-        { title: 'Effective End', versions: '*', format: 'date', getter: m => m.effectivePeriod.end},
-        { title: 'Effective Date', versions: '*', format: 'date', getter: m => m.effectiveDateTime},
+        { title: 'Effective', versions: '*', getter: m => attributeXTime(m,'effective')},
         { title: 'Status', versions: '*', getter: m => m.status},
         { title: 'Status Reason', versions: '*', format: 'code', getter: m => m.statusReason[0].coding[0] },
         { title: 'Recorded', versions: '*', format: 'date', getter: m => m.extension.recorded }
