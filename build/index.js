@@ -60,7 +60,7 @@ const FORMATTERS = {
   time: str => moment(str).format('HH:mm:ss'),
   dateTime: str => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
   numberWithCommas: str => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-  code: code => `${code.code} ${code.display ? code.display : ''}`,
+  code: code => `${code.code}: ${code.display ? code.display : ''}`,
   period: period => `${moment(period.start).format('YYYY-MM-DD - h:mm:ss a')} -> ${moment(period.end).format('YYYY-MM-DD - h:mm:ss a')}`
 };
 const SPACER = {
@@ -456,7 +456,7 @@ _defineProperty(ReportsVisualizer, "defaultProps", {
     getter: rpt => rpt.presentedForm,
     keyFn: p => Math.floor(Math.random() * 100),
     // TODO, pass in index
-    columns: [SPACER, {
+    columns: [{
       title: 'Content',
       versions: '*',
       getter: p => atob(p.data)
@@ -547,7 +547,7 @@ _defineProperty(CarePlansVisualizer, "defaultProps", {
   nestedRows: [{
     getter: cp => cp.goals,
     keyFn: g => g.id,
-    columns: [SPACER, {
+    columns: [{
       title: 'Goal',
       versions: [DSTU2],
       getter: g => `Goal: ${goalDescriptionDSTU2(g)}`
@@ -559,7 +559,7 @@ _defineProperty(CarePlansVisualizer, "defaultProps", {
   }, {
     getter: cp => cp.activity,
     keyFn: a => Math.random(),
-    columns: [SPACER, {
+    columns: [{
       title: 'Activity',
       versions: '*',
       format: 'code',

@@ -16,7 +16,7 @@ const FORMATTERS = {
   time: (str) => moment(str).format('HH:mm:ss'),
   dateTime: (str) => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
   numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-  code: (code) => `${code.code} ${code.display ? code.display : ''}`,
+  code: (code) => `${code.code}: ${code.display ? code.display : ''}`,
   period: (period) => `${moment(period.start).format('YYYY-MM-DD - h:mm:ss a')} -> ${moment(period.end).format('YYYY-MM-DD - h:mm:ss a')}`
 };
 
@@ -383,7 +383,6 @@ class ReportsVisualizer extends GenericVisualizer {
         getter: rpt => rpt.presentedForm,
         keyFn: p => Math.floor(Math.random() * 100), // TODO, pass in index
         columns: [
-          SPACER,
           { title: 'Content', versions: '*', getter: p => atob(p.data) },
           SPACER,
           SPACER
@@ -443,7 +442,6 @@ class CarePlansVisualizer extends GenericVisualizer {
         getter: cp => cp.goals,
         keyFn: g => g.id,
         columns: [
-          SPACER,
           { title: 'Goal', versions: [DSTU2], getter: g => `Goal: ${goalDescriptionDSTU2(g)}` },
           { title: 'Goal', versions: [STU3, R4], getter: g => `Goal: ${goalDescriptionSTU3R4(g)}` },
           SPACER
@@ -453,7 +451,6 @@ class CarePlansVisualizer extends GenericVisualizer {
         getter: cp => cp.activity,
         keyFn: a => Math.random(),
         columns: [
-          SPACER,
           { title: 'Activity', versions: '*', format: 'code', getter: a => a.detail.code.coding[0] },
           SPACER
         ]
