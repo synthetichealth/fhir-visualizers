@@ -328,23 +328,77 @@ class ResourceVisualizer extends React.Component {
     if (resourceType === "Patient") return /*#__PURE__*/React.createElement(PatientVisualizer, {
       patient: this.props.patient
     });else if (resourceType === "Condition") return /*#__PURE__*/React.createElement(ConditionsVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "Observation") return /*#__PURE__*/React.createElement(ObservationsVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "DiagnosticReport") return /*#__PURE__*/React.createElement(ReportsVisualizer, {
-      rows: this.props.rows
-    });else if (resourceType === "MedicationRequest") return /*#__PURE__*/React.createElement(MedicationsVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "Medication") return /*#__PURE__*/React.createElement(MedicationsVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "AllergyIntolerance") return /*#__PURE__*/React.createElement(AllergiesVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "CarePlan") return /*#__PURE__*/React.createElement(CarePlansVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "Procedure") return /*#__PURE__*/React.createElement(ProceduresVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "Encounter") return /*#__PURE__*/React.createElement(EncountersVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });else if (resourceType === "Immunization") return /*#__PURE__*/React.createElement(ImmunizationsVisualizer, {
-      rows: this.props.rows
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "ServiceRequest") return /*#__PURE__*/React.createElement(ServiceRequestVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "DeviceRequest") return /*#__PURE__*/React.createElement(DeviceRequestVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "Communication") return /*#__PURE__*/React.createElement(CommunicationVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "Coverage") return /*#__PURE__*/React.createElement(CoverageVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "AdverseEvent") return /*#__PURE__*/React.createElement(AdverseEventVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "NutritionOrder") return /*#__PURE__*/React.createElement(NutritionOrderVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "MedicationRequest") return /*#__PURE__*/React.createElement(MedicationRequestVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "MedicationAdministration") return /*#__PURE__*/React.createElement(MedicationAdministrationVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
+    });else if (resourceType === "MedicationDispense") return /*#__PURE__*/React.createElement(MedicationDispenseVisualizer, {
+      rows: this.props.rows,
+      onRowClick: this.props.onRowClick,
+      dynamicRowClass: this.props.dynamicRowClass
     });
   }
 

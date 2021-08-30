@@ -308,23 +308,41 @@ class ResourceVisualizer extends React.Component {
     if (resourceType === "Patient")
       return <PatientVisualizer patient={this.props.patient} />;
     else if (resourceType === "Condition")
-      return <ConditionsVisualizer rows={this.props.rows} />;
+      return <ConditionsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Observation")
-      return <ObservationsVisualizer rows={this.props.rows} />;
+      return <ObservationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass} />;
     else if (resourceType === "DiagnosticReport")
-      return <ReportsVisualizer rows={this.props.rows} />;
-    else if (resourceType === "MedicationRequest")
-      return <MedicationsVisualizer rows={this.props.rows} />;
+      return <ReportsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Medication")
+      return <MedicationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "AllergyIntolerance")
-      return <AllergiesVisualizer rows={this.props.rows} />;
+      return <AllergiesVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "CarePlan")
-      return <CarePlansVisualizer rows={this.props.rows} />;
+      return <CarePlansVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Procedure")
-      return <ProceduresVisualizer rows={this.props.rows} />;
+      return <ProceduresVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Encounter")
-      return <EncountersVisualizer rows={this.props.rows} />;
+      return <EncountersVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Immunization")
-      return <ImmunizationsVisualizer rows={this.props.rows} />;
+      return <ImmunizationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "ServiceRequest")
+      return <ServiceRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "DeviceRequest")
+      return <DeviceRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Communication")
+      return <CommunicationVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Coverage")
+      return <CoverageVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "AdverseEvent")
+      return <AdverseEventVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "NutritionOrder")
+      return <NutritionOrderVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationRequest")
+      return <MedicationRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationAdministration")
+      return <MedicationAdministrationVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationDispense")
+      return <MedicationDispenseVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
   }
 }
 
