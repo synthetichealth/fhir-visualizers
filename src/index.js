@@ -15,7 +15,9 @@ const FORMATTERS = {
   date: (str) => moment(str).format('YYYY-MM-DD'),
   time: (str) => moment(str).format('HH:mm:ss'),
   dateTime: (str) => moment(str).format('YYYY-MM-DD - h:mm:ss a'),
-  numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  numberWithCommas: (str) => str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+  code: (code) => `${code.code}: ${code.display ? code.display : ''}`,
+  period: (period) => `${moment(period.start).format('YYYY-MM-DD - h:mm:ss a')} -> ${moment(period.end).format('YYYY-MM-DD - h:mm:ss a')}`
 };
 
 const SPACER = { title: '', versions: '*', getter: () => '' };
@@ -50,6 +52,17 @@ const obsValue = (entry) => {
     }
   }
 
+  return '';
+}
+
+const attributeXTime = (entry, type) => {
+  if (entry == null) {
+    return '';
+  } else if (entry[`${type}DateTime`]) {
+    return FORMATTERS['dateTime'](entry[`${type}DateTime`])
+  } else if (entry[`${type}Period`]) {
+    return FORMATTERS['period'](entry[`${type}Period`])
+  }
   return '';
 }
 
@@ -170,6 +183,21 @@ class GenericVisualizer extends React.Component {
       keyFn: (c) => c.id
     */
 
+  onRowClick(line) {
+    if(this.props.onRowClick){
+      this.props.onRowClick(line);
+    }
+  }
+
+  rowClass(line) {
+    if(this.props.dynamicRowClass){
+      return this.props.dynamicRowClass(line);
+    }else if(this.props.rowClass){
+      return this.props.rowClass;
+    }
+    return '';
+  }
+
   renderHeaderLine() {
     const columns =
       this.props.columns
@@ -224,7 +252,7 @@ class GenericVisualizer extends React.Component {
 
     return (
         <React.Fragment key={this.props.keyFn(line)}>
-          <tr className={this.props.rowClass || ''} key={this.props.keyFn(line)}>
+          <tr onClick={() => this.onRowClick(line)} className={this.rowClass(line)} key={this.props.keyFn(line)}>
             { columns.map((c,i) => {
                 const formatter = FORMATTERS[c.format];
                 let result;
@@ -280,23 +308,41 @@ class ResourceVisualizer extends React.Component {
     if (resourceType === "Patient")
       return <PatientVisualizer patient={this.props.patient} />;
     else if (resourceType === "Condition")
-      return <ConditionsVisualizer rows={this.props.rows} />;
+      return <ConditionsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Observation")
-      return <ObservationsVisualizer rows={this.props.rows} />;
+      return <ObservationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass} />;
     else if (resourceType === "DiagnosticReport")
-      return <ReportsVisualizer rows={this.props.rows} />;
-    else if (resourceType === "MedicationRequest")
-      return <MedicationsVisualizer rows={this.props.rows} />;
+      return <ReportsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Medication")
+      return <MedicationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "AllergyIntolerance")
-      return <AllergiesVisualizer rows={this.props.rows} />;
+      return <AllergiesVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "CarePlan")
-      return <CarePlansVisualizer rows={this.props.rows} />;
+      return <CarePlansVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Procedure")
-      return <ProceduresVisualizer rows={this.props.rows} />;
+      return <ProceduresVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Encounter")
-      return <EncountersVisualizer rows={this.props.rows} />;
+      return <EncountersVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
     else if (resourceType === "Immunization")
-      return <ImmunizationsVisualizer rows={this.props.rows} />;
+      return <ImmunizationsVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "ServiceRequest")
+      return <ServiceRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "DeviceRequest")
+      return <DeviceRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Communication")
+      return <CommunicationVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "Coverage")
+      return <CoverageVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "AdverseEvent")
+      return <AdverseEventVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "NutritionOrder")
+      return <NutritionOrderVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationRequest")
+      return <MedicationRequestVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationAdministration")
+      return <MedicationAdministrationVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
+    else if (resourceType === "MedicationDispense")
+      return <MedicationDispenseVisualizer rows={this.props.rows} onRowClick={this.props.onRowClick} dynamicRowClass={this.props.dynamicRowClass}/>;
   }
 }
 
@@ -305,10 +351,12 @@ class ConditionsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Conditions',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Condition', versions: '*', getter: c => c.code.coding[0].display },
+        { title: 'Condition', versions: '*', format: 'code', getter: c => c.code.coding[0] },
         { title: 'Date of Onset', versions: '*', format: 'date', getter: c => c.onsetDateTime },
-        { title: 'Date Resolved', 'versions': '*', format: 'date', getter: c => c.abatementDateTime, defaultValue: 'N/A' }
+        { title: 'Date Resolved', 'versions': '*', format: 'date', getter: c => c.abatementDateTime, defaultValue: 'N/A' },
+        { title: 'Recorded Date', versions: '*', format: 'date', getter: c => c.recordedDate },
+        { title: 'Severity', versions: '*', format: 'code', getter: c => c.severity.coding[0] },
+        { title: 'Body Site', versions: '*', format: 'code', getter: c => c.bodySite[0].coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -319,10 +367,11 @@ class ObservationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Observations',
     columns: [
-        { title: 'LOINC', versions: '*', getter: o => o.code.coding[0].code },
-        { title: 'Observation', versions: '*', getter: o => o.code.coding[0].display },
+        { title: 'Observation', versions: '*', format: 'code', getter: o => o.code.coding[0] },
         { title: 'Value', versions: '*', getter: o => obsValue(o) },
-        { title: 'Date Recorded', 'versions': '*', format: 'date', getter: o => o.effectiveDateTime }
+        { title: 'Effective', 'versions': '*', getter: o => attributeXTime(o,'effective') },
+        { title: 'Issued Date', 'versions': '*', format: 'date', getter: o => o.issued },
+        { title: 'ID', versions: '*', getter: o => o.id }
       ],
       keyFn: o => o.id
   };
@@ -333,10 +382,9 @@ class ReportsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Reports',
     columns: [
-        { title: 'LOINC', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Report/Observation', versions: '*', getter: c => c.code.coding[0].display },
+        { title: 'Report/Observation', versions: '*', format: 'code', getter: r => r.code.coding[0] },
         { title: 'Value', versions: '*', getter: () => '' },
-        { title: 'Date', 'versions': '*', format: 'date', getter: c => c.effectiveDateTime, defaultValue: 'N/A' }
+        { title: 'Effective', 'versions': '*', getter: r => attributeXTime(r,'effective'), defaultValue: 'N/A' }
       ],
     rowClass: 'report-line',
     nestedRows: [
@@ -344,8 +392,7 @@ class ReportsVisualizer extends GenericVisualizer {
         getter: rpt => rpt.observations,
         keyFn: o => o.id,
         columns: [
-          { title: 'LOINC', versions: '*', getter: o => o.code.coding[0].code },
-          { title: 'Report/Observation', versions: '*', getter: o => o.code.coding[0].display },
+          { title: 'Report/Observation', versions: '*', format: 'code', getter: o => o.code.coding[0] },
           { title: 'Value', versions: '*', getter: o => obsValue(o) },
           SPACER
         ]
@@ -354,7 +401,6 @@ class ReportsVisualizer extends GenericVisualizer {
         getter: rpt => rpt.presentedForm,
         keyFn: p => Math.floor(Math.random() * 100), // TODO, pass in index
         columns: [
-          SPACER,
           { title: 'Content', versions: '*', getter: p => atob(p.data) },
           SPACER,
           SPACER
@@ -369,8 +415,7 @@ class MedicationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Medications',
     columns: [
-        { title: 'RxNorm', versions: '*', getter: c => c.medicationCodeableConcept.coding[0].code },
-        { title: 'Medication', versions: '*', getter: c => c.medicationCodeableConcept.coding[0].display },
+        { title: 'Medication', versions: '*', format: 'code', getter: c => c.medicationCodeableConcept.coding[0] },
         { title: 'Date Prescribed', versions: '*', format: 'date', getter: c => c.authoredOn },
         { title: 'Status', 'versions': '*', getter: c => c.status }
       ],
@@ -382,10 +427,11 @@ class AllergiesVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Allergies',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Allergy', versions: '*', getter: c => c.code.coding[0].display },
-        { title: 'Date Recorded', versions: [R4], getter: c => c.recordedDate },
-        { title: 'Date Recorded', versions: [DSTU2, STU3], format: 'date', getter: c => c.assertedDate },
+        { title: 'Allergy', versions: '*', format: 'code', getter: a => a.code.coding[0] },
+        { title: 'Date Recorded', versions: [R4], getter: a => a.recordedDate },
+        { title: 'Date Recorded', versions: [DSTU2, STU3], format: 'date', getter: a => a.assertedDate },
+        { title: 'Onset', versions: '*', format: 'date', getter: a => a.onsetDateTime },
+        { title: 'Resolution Age', versions: '*', format: 'date', getter: a => a.extension.resolutionAge }
       ],
       keyFn: c => c.id
   };
@@ -406,16 +452,14 @@ class CarePlansVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'CarePlans',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.category[0].coding[0].code },
-        { title: 'Care Plan', versions: '*', getter: c => c.category[0].coding[0].display },
-        { title: 'Date', versions: '*', format: 'date', getter: c => c.period.start }
+        { title: 'Care Plan', versions: '*', format: 'code', getter: c => c.category[0].coding[0] },
+        { title: 'Date', versions: '*', format: 'period', getter: c => c.period }
     ],
     nestedRows: [
       {
         getter: cp => cp.goals,
         keyFn: g => g.id,
         columns: [
-          SPACER,
           { title: 'Goal', versions: [DSTU2], getter: g => `Goal: ${goalDescriptionDSTU2(g)}` },
           { title: 'Goal', versions: [STU3, R4], getter: g => `Goal: ${goalDescriptionSTU3R4(g)}` },
           SPACER
@@ -425,8 +469,7 @@ class CarePlansVisualizer extends GenericVisualizer {
         getter: cp => cp.activity,
         keyFn: a => Math.random(),
         columns: [
-          SPACER,
-          { title: 'Activity', versions: '*', getter: a => `Activity: ${a.detail.code.coding[0].display}` },
+          { title: 'Activity', versions: '*', format: 'code', getter: a => a.detail.code.coding[0] },
           SPACER
         ]
       }
@@ -439,9 +482,13 @@ class ProceduresVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Procedures',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: c => c.code.coding[0].code },
-        { title: 'Procedure', versions: '*', getter: c => c.code.coding[0].display },
-        { title: 'Date Performed', versions: '*', format: 'dateTime', getter: c => c.performedPeriod.start }
+      { title: 'Procedure', versions: '*', format: 'code', getter: p => p.code.coding[0] },
+      { title: 'Performed', versions: '*', getter: p => attributeXTime(p,'performed') },
+      { title: 'ID', versions: '*', getter: p => p.id },
+      { title: 'Recorded', versions: '*', format: 'dateTime', getter: p => p.extension.recorded },
+      { title: 'Reason', versions: '*', format: 'code', getter: p => p.reasonCode.coding[0] },
+      { title: 'Status', versions: '*', getter: p => p.status },
+      { title: 'Status Reason', versions: '*', format: 'code', getter: p => p.statusReason.coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -451,10 +498,10 @@ class EncountersVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Encounters',
     columns: [
-        { title: 'SNOMED', versions: '*', getter: e => e.type[0].coding[0].code },
-        { title: 'Encounter', versions: '*', getter: e => e.type[0].coding[0].display },
-        { title: 'Start Time', versions: '*', format: 'dateTime', getter: e => e.period.start },
-        { title: 'Duration', 'versions': '*', getter: e => duration(e.period) }
+        { title: 'Encounter', versions: '*', format: 'code', getter: e => e.type[0].coding[0] },
+        { title: 'Period', versions: '*', format: 'period', getter: e => e.period },
+        { title: 'Diagnosis', versions: '*', getter: e => e.diagnosis.map(d => d.condition.reference).join()},
+        { title: 'Discharge Disposition', versions: '*', format: 'code', getter: e => e.hospitalization.dischargeDisposition.coding[0] }
       ],
       keyFn: c => c.id
   };
@@ -464,9 +511,9 @@ class ImmunizationsVisualizer extends GenericVisualizer {
   static defaultProps = {
     title: 'Vaccinations',
     columns: [
-        { title: 'CVX', versions: '*', getter: c => c.vaccineCode.coding[0].code },
-        { title: 'Vaccine', versions: '*', getter: c => c.vaccineCode.coding[0].display },
-        { title: 'Date Given', versions: '*', format: 'date', getter: c => c.occurrenceDateTime },
+        { title: 'Vaccine', versions: '*', format: 'code', getter: i => i.vaccineCode.coding[0] },
+        { title: 'Date Given', versions: '*', format: 'date', getter: i => i.occurrenceDateTime },
+        { title: 'Date Recorded', versions: '*', format: 'date', getter: i => i.recorded }
       ],
       keyFn: c => c.id
   };
@@ -483,6 +530,125 @@ class DocumentReferencesVisualizer extends GenericVisualizer {
   };
 }
 
+class ServiceRequestVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Service Requests',
+    columns: [
+        { title: 'Service', versions: '*', format: 'code', getter: s => s.code.coding[0] },
+        { title: 'Author Date', versions: '*', format: 'date', getter: s => s.authoredOn },
+        { title: 'Status', versions: '*', getter: s => s.status },
+        { title: 'Reason', versions: '*', format: 'code', getter: s => s.reasonCode[0].coding[0] },
+        { title: 'ID', versions: '*', getter: s => s.id },
+        { title: 'Do Not Perform', versions: '*', getter: s => s.doNotPerform },
+        { title: 'Reason Refused', versions: '*', format: 'code', getter: s => s.extension.reasonRefused.coding[0] }
+      ],
+      keyFn: s => s.id
+  };
+}
+
+class DeviceRequestVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Device Requests',
+    columns: [
+        { title: 'Device', versions: '*', format: 'code', getter: d => d.codeCodeableConcept.coding[0] },
+        { title: 'Author Date', versions: '*', format: 'date', getter: d => d.authoredOn },
+        { title: 'Do Not Perform', versions: '*', getter: d => d.modifierExtension.doNotPerform },
+        { title: 'Do Not Perform Reason', versions: '*', format: 'code', getter: s => s.extension.doNotPerformReason.coding[0] }
+      ],
+      keyFn: d => d.id
+  };
+}
+
+class CommunicationVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Communications',
+    columns: [
+        { title: 'Reason', versions: '*', format: 'code', getter: c => c.reasonCode[0].coding[0] },
+        { title: 'Sent', versions: '*', format: 'date', getter: c => c.sent },
+        { title: 'Received', versions: '*', format: 'date', getter: c => c.received },
+        { title: 'Status', versions: '*', getter: c => c.status }
+      ],
+      keyFn: c => c.id
+  };
+}
+
+class CoverageVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Coverage',
+    columns: [
+        { title: 'Type', versions: '*', format: 'code', getter: c => c.type.coding[0] },
+        { title: 'Period', versions: '*', format: 'period', getter: c => c.period }
+      ],
+      keyFn: c => c.id
+  };
+}
+
+class AdverseEventVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Adverse Events',
+    columns: [
+        { title: 'Event', versions: '*', format: 'code', getter: a => a.event.coding[0] },
+        { title: 'Date', versions: '*', format: 'date', getter: a => a.date }
+      ],
+      keyFn: a => a.id
+  };
+}
+
+class NutritionOrderVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Nutrition Orders',
+    columns: [
+        { title: 'Preference', versions: '*', format: 'code', getter: n => n.foodPreferenceModifier[0].coding[0] },
+        { title: 'Exclusion', versions: '*', format: 'code', getter: n => n.excludeFoodModifier[0].coding[0] },
+        { title: 'Date', versions: '*', format: 'date', getter: n => n.dateTime },
+        { title: 'Status', versions: '*', getter: n => n.status }
+      ],
+      keyFn: n => n.id
+  };
+}
+
+class MedicationRequestVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Medication Requests',
+    columns: [
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
+        { title: 'Dosage Timing', versions: '*', format: 'period', getter: m => m.dosageInstruction[0].timing.repeat.boundsPeriod},
+        { title: 'Dosage Date', versions: '*', format: 'date', getter: m => m.dosageInstruction[0].timing.event},
+        { title: 'Author Date', versions: '*', format: 'date', getter: m => m.authoredOn },
+        { title: 'Do Not Perform', versions: '*', getter: m => m.doNotPerform},
+        { title: 'Reason', versions: '*', format: 'code', getter: m => m.reasonCode[0].coding[0] },
+        { title: 'Route', versions: '*', format: 'code', getter: m => m.dosageInstruction[0].route.coding[0] }
+      ],
+      keyFn: m => m.id
+  };
+}
+
+class MedicationAdministrationVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Medication Administration',
+    columns: [
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
+        { title: 'Route', versions: '*', format: 'code', getter: m => m.dosage.route.coding[0] },
+        { title: 'Effective', versions: '*', getter: m => attributeXTime(m,'effective')},
+        { title: 'Status', versions: '*', getter: m => m.status},
+        { title: 'Status Reason', versions: '*', format: 'code', getter: m => m.statusReason[0].coding[0] },
+        { title: 'Recorded', versions: '*', format: 'date', getter: m => m.extension.recorded }
+      ],
+      keyFn: m => m.id
+  };
+}
+
+class MedicationDispenseVisualizer extends GenericVisualizer {
+  static defaultProps = {
+    title: 'Medication Dispenses',
+    columns: [
+        { title: 'Medication', versions: '*', format: 'code', getter: m => m.medicationCodeableConcept.coding[0] },
+        { title: 'Handed Over Date', versions: '*', format: 'date', getter: m => m.whenHandedOver}
+      ],
+      keyFn: m => m.id
+  };
+}
+
 export {
   PatientVisualizer,
   ConditionsVisualizer,
@@ -495,5 +661,14 @@ export {
   EncountersVisualizer,
   ImmunizationsVisualizer,
   DocumentReferencesVisualizer,
-  ResourceVisualizer
+  ResourceVisualizer,
+  ServiceRequestVisualizer,
+  DeviceRequestVisualizer,
+  CommunicationVisualizer,
+  CoverageVisualizer,
+  AdverseEventVisualizer,
+  NutritionOrderVisualizer,
+  MedicationRequestVisualizer,
+  MedicationAdministrationVisualizer,
+  MedicationDispenseVisualizer
 };
