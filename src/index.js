@@ -112,7 +112,8 @@ class PatientVisualizer extends React.Component {
 
     const cause_of_death_obs = null;
 
-    const hasAddress = patient.address && patient.address[0];
+    const patientAddress = patient.address && patient.address[0];
+    const patientName = patient.name && patient.name[0];
 
     // let lat, lng;
     // if (hasAddress && patient.address[0].extension) {
@@ -132,17 +133,17 @@ class PatientVisualizer extends React.Component {
           <div id="p_brief_name_address" className="p_block">
             <dl className="dl-horizontal p_brief_family">
               <dt>Name</dt>
-                <dd>{ patient.name[0].family }, { patient.name[0].given.join(' ') }</dd>
+                <dd>{ patientName && patientName.family }, { patientName && patientName.given && patientName.given.join(' ') }</dd>
               <dt>Gender</dt>
                 <dd>{ patient.gender }</dd>
               <dt>Date of Birth</dt>
                 <dd>{ patient.birthDate }</dd>
               <dt>Address</dt>
-                <dd>{ hasAddress && patient.address[0].line.join(' ') }</dd>
+                <dd>{ patientAddress && patientAddress.line && patientAddress.line.join(' ') }</dd>
               <dt>City, State</dt>
-                <dd>{ hasAddress && patient.address[0].city }, { hasAddress && patient.address[0].state }</dd>
+                <dd>{ patientAddress && patientAddress.city }, { patientAddress && patientAddress.state }</dd>
               <dt>Postal Code</dt>
-                <dd>{ hasAddress && patient.address[0].postalCode }</dd>
+                <dd>{ patientAddress && patientAddress.postalCode }</dd>
               {patient.deceasedDateTime && <React.Fragment><dt>Date of Death</dt>
                 <dd>{ patient.deceasedDateTime }</dd></React.Fragment> }
             </dl>

@@ -149,7 +149,8 @@ class PatientVisualizer extends React.Component {
     const height_obs = searchableObs.find(o => o.code.coding[0].display === 'Body Height');
     const weight_obs = searchableObs.find(o => o.code.coding[0].display === 'Body Weight');
     const cause_of_death_obs = null;
-    const hasAddress = patient.address && patient.address[0]; // let lat, lng;
+    const patientAddress = patient.address && patient.address[0];
+    const patientName = patient.name && patient.name[0]; // let lat, lng;
     // if (hasAddress && patient.address[0].extension) {
     //   const geolocation = patient.address[0].extension.find(e => e.url === 'http://hl7.org/fhir/StructureDefinition/geolocation');
     //   if (geolocation && geolocation.extension.length > 1) {
@@ -175,7 +176,7 @@ class PatientVisualizer extends React.Component {
       className: "p_block"
     }, /*#__PURE__*/React.createElement("dl", {
       className: "dl-horizontal p_brief_family"
-    }, /*#__PURE__*/React.createElement("dt", null, "Name"), /*#__PURE__*/React.createElement("dd", null, patient.name[0].family, ", ", patient.name[0].given.join(' ')), /*#__PURE__*/React.createElement("dt", null, "Gender"), /*#__PURE__*/React.createElement("dd", null, patient.gender), /*#__PURE__*/React.createElement("dt", null, "Date of Birth"), /*#__PURE__*/React.createElement("dd", null, patient.birthDate), /*#__PURE__*/React.createElement("dt", null, "Address"), /*#__PURE__*/React.createElement("dd", null, hasAddress && patient.address[0].line.join(' ')), /*#__PURE__*/React.createElement("dt", null, "City, State"), /*#__PURE__*/React.createElement("dd", null, hasAddress && patient.address[0].city, ", ", hasAddress && patient.address[0].state), /*#__PURE__*/React.createElement("dt", null, "Postal Code"), /*#__PURE__*/React.createElement("dd", null, hasAddress && patient.address[0].postalCode), patient.deceasedDateTime && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("dt", null, "Date of Death"), /*#__PURE__*/React.createElement("dd", null, patient.deceasedDateTime))))), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("dt", null, "Name"), /*#__PURE__*/React.createElement("dd", null, patientName && patientName.family, ", ", patientName && patientName.given && patientName.given.join(' ')), /*#__PURE__*/React.createElement("dt", null, "Gender"), /*#__PURE__*/React.createElement("dd", null, patient.gender), /*#__PURE__*/React.createElement("dt", null, "Date of Birth"), /*#__PURE__*/React.createElement("dd", null, patient.birthDate), /*#__PURE__*/React.createElement("dt", null, "Address"), /*#__PURE__*/React.createElement("dd", null, patientAddress && patientAddress.line && patientAddress.line.join(' ')), /*#__PURE__*/React.createElement("dt", null, "City, State"), /*#__PURE__*/React.createElement("dd", null, patientAddress && patientAddress.city, ", ", patientAddress && patientAddress.state), /*#__PURE__*/React.createElement("dt", null, "Postal Code"), /*#__PURE__*/React.createElement("dd", null, patientAddress && patientAddress.postalCode), patient.deceasedDateTime && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("dt", null, "Date of Death"), /*#__PURE__*/React.createElement("dd", null, patient.deceasedDateTime))))), /*#__PURE__*/React.createElement("div", {
       id: "p_brief_records",
       className: "col-6"
     }, /*#__PURE__*/React.createElement("div", {
